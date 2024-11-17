@@ -1,3 +1,12 @@
+# 上传目录会自动创建
+uploads/
+
+# Bootstrap
+bootstrap-5.3.3-dist/
+
+# 激活文件
+ArcFacePro64.dat
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -14,7 +23,6 @@ dist/
 downloads/
 eggs/
 .eggs/
-lib/
 lib64/
 parts/
 sdist/

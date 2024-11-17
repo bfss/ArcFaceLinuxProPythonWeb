@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>虹软Linux Pro SDK人证对比</title>
+    <!-- 引入Bootstrap CSS -->
+    <link href="{{ url_for('static', path='bootstrap-5.3.3-dist/css/bootstrap.min.css') }}" rel="stylesheet" >
+    <style>
+        .image-container {
+            width: 100%;
+            height: 90vh;
+            border: 2px solid #ccc;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: auto;
+        }
+        .image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-5">
+                <h4>采集照</h4>
+                <div id="image-container-1" class="image-container"></div>
+            </div>
+            <div class="col-md-2 d-flex justify-content-center align-items-center">
+                <div>
+                    <input type="file" id="file-input-1" class="form-control mb-2" accept="image/*">
+                    <input type="file" id="file-input-2" class="form-control mb-2" accept="image/*">
+                    <button id="upload-button" class="btn btn-primary">人证对比</button>
+                    <p id="confidence-level" class="mt-2">相似度：</p>
+                </div>
+            </div>
+            <div class="col-md-5">
+                <h4>证件照</h4>
+                <div id="image-container-2" class="image-container"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 引入Bootstrap JS -->
+    <script src="{{ url_for('static', path='bootstrap-5.3.3-dist/js/bootstrap.min.js') }}"></script>
+    <script>
+        const fileInput1 = document.getElementById('file-input-1');
+        const fileInput2 = document.getElementById('file-input-2');
+        const uploadButton = document.getElementById('upload-button');
+        const imageContainer1 = document.getElementById('image-container-1');
+        const imageContainer2 = document.getElementById('image-container-2');
+        const confidenceLevel = document.getElementById('confidence-level');
+
+        // 显示选择的图片
+        function displayImage(file, container) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                container.innerHTML = ''; // 清空容器
+                container.appendChild(img);
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // 选择图片后预览
+        fileInput1.addEventListener('change', () => {
+            const file = fileInput1.files[0];
+            if (file) displayImage(file, imageContainer1);
+        });
+
+        fileInput2.addEventListener('change', () => {
+            const file = fileInput2.files[0];
+            if (file) displayImage(file, imageContainer2);
+        });
+
+        // 上传图片
+        uploadButton.addEventListener('click', async () => {
+            const formData = new FormData();
+            formData.append('image_1', fileInput1.files[0]);
+            formData.append('image_2', fileInput2.files[0]);
+
+            const response = await fetch('/compare/', {
+                method: 'POST',
+                body: formData
+            });
+
+            if (response.ok) {
+                const jsonData = await response.json();
+                confidenceLevel.innerText = "相似度：" + jsonData.confidence_level
+            } else {
+                alert('上传失败');
+            }
+        });
+    </script>
+</body>
+</html>

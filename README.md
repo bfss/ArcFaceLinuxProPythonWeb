@@ -6,8 +6,10 @@
 
 - 在项目根目录新建.env文件，设置从官网获得的激活信息
 
-    > APP_ID = 
-    > SDK_KEY = 
+    > APP_ID =
+    > 
+    > SDK_KEY =
+    >  
     > ACTIVE_KEY = 
 
 - 将SDK中的libarcsoft_face_engine.so和libarcsoft_face.so放到lib目录下

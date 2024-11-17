@@ -118,7 +118,7 @@ async def compare(
             h_engine,
             feature_1,
             feature_2,
-            ASF_CompareModel.ASF_LIFE_PHOTO.value
+            ASF_CompareModel.ASF_ID_PHOTO.value
         )
     except:
         raise HTTPException(500, "对比失败")

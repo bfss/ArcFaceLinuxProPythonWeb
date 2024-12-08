@@ -70,3 +70,17 @@ def extract_feature(image_name, asf, h_engine):
     )
     
     return feature
+
+def compare_face(image_1, image_2, asf, h_engine):
+    """人脸对比"""
+    feature_1 = extract_feature(image_1, asf, h_engine)
+    feature_2 = extract_feature(image_2, asf, h_engine)
+
+    confidence_level = asf.asf_face_feature_compare(
+        h_engine,
+        feature_1,
+        feature_2,
+        ASF_CompareModel.ASF_ID_PHOTO.value
+    )
+
+    return confidence_level

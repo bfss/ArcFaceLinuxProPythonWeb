@@ -8,7 +8,7 @@ from fastapi.staticfiles import StaticFiles
 from config import config
 from asf.asf import ASF
 from asf.asf_common import *
-from utils.face_utils import extract_feature
+from utils.face_utils import extract_feature, compare_face
 
 
 # 建立上传文件夹
@@ -50,14 +50,11 @@ async def compare(
         f.write(content_2)
 
     try:
-        feature_1 = extract_feature(f"uploads/{image_name_1}", asf, h_engine)
-        feature_2 = extract_feature(f"uploads/{image_name_2}", asf, h_engine)
-
-        confidence_level = asf.asf_face_feature_compare(
-            h_engine,
-            feature_1,
-            feature_2,
-            ASF_CompareModel.ASF_ID_PHOTO.value
+        confidence_level = compare_face(
+            f"uploads/{image_name_1}",
+            f"uploads/{image_name_2}",
+            asf,
+            h_engine
         )
     except:
         raise HTTPException(500, "对比失败")
